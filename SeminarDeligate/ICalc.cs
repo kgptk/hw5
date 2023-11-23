@@ -8,10 +8,10 @@ namespace SeminarDeligate
 {
     public interface ICalc
     {
-        void Sum(int x);
-        void Sub(int x);
-        void Mul(int x);
-        void Divide(int x);
+        void Sum(double x);
+        double Sub(double x);
+        void Mul(double x);
+        void Divide(double x);
         void CanselLast();
 
         event EventHandler<EventArgs> MyEventHandler;
