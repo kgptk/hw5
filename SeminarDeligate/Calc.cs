@@ -9,7 +9,7 @@ namespace SeminarDeligate
 {
     internal class Calc: ICalc
     {
-        public double Result { get; set; } = 1;
+        public double Result { get; set; } = 0;
         private Stack<double> LastResult { get; set; } = new Stack<double>();
 
         public event EventHandler<EventArgs> MyEventHandler;
@@ -25,7 +25,7 @@ namespace SeminarDeligate
             MyEventHandler?.Invoke(this, new  EventArgs());   
         }
 
-        public void Sum(int x)
+        public void Sum(double x)
         {
             Result += x;
             PrintResult();
@@ -34,17 +34,18 @@ namespace SeminarDeligate
 
            
         }
-        public void Sub(int x)
+        public double Sub(double x)
         {
             Result -= x;
             PrintResult();
             LastResult.Push(Result);
-
+            return Result;
 
         }
 
-        public void Divide(int x)
+        public void Divide(double x)
         {
+
             Result /= x;
             PrintResult();
             LastResult.Push(Result);
@@ -53,7 +54,7 @@ namespace SeminarDeligate
 
         }
 
-        public void Mul(int x)
+        public void Mul(double x)
         {
             Result *= x;
             PrintResult();
