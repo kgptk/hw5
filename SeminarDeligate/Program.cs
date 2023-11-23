@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,13 +20,27 @@ namespace SeminarDeligate
             {            
                 Console.WriteLine("Введите число: ");
                 string strDigit = Console.ReadLine();
-                int number;
-                if (int.TryParse(strDigit, out number))
+                double number;
+                if (DoubleTryParse(strDigit, out number))
                 {
-                    Console.WriteLine("Введите операцию, которую необходимо выполнить \n (+, -, *, /) \n < чтобы отменить последнее действие \n! чтобы закончить: ");
+                    try
+                    {
+                        NegativeNumber(number);
+                    }
+                    catch (NegativeExeption ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                    catch { };
+
+                    Console.WriteLine("Введите операцию, которую необходимо выполнить \n" +
+                        "+, -, *, /\n" +
+                        "< чтобы отменить последнее действие \n" +
+                        "! чтобы закончить: ");
                     string operation = Console.ReadLine();
 
                     char[] chars = operation.ToCharArray();
+
                     if (chars.Length == 1)
                     {
                         switch (chars[0])
@@ -34,7 +49,16 @@ namespace SeminarDeligate
                                 break;
                            
                             case '-':
-                                calc.Sub(number);
+                                try
+                                {
+                                    ResultNegativeNumber(calc.Sub(number));
+                                }
+                                catch (NegativeExeption ex)
+                                {
+                                    Console.WriteLine(ex.ToString());
+                                }
+                                catch { };
+
                                 break;
                             case '*':
                                 calc.Mul(number);
@@ -58,16 +82,6 @@ namespace SeminarDeligate
                     }
                 }
             }
-           
-            //calc.Sub(10);
-            //calc.Sum(1);
-            //calc.Mul(5);
-            //calc.CanselLast();
-            //calc.CanselLast();
-            //
-            //calc.CanselLast();
-            Console.ReadKey();
-
         }
 
         private static void Calc_MyEventHandler(object sender, EventArgs e)
@@ -78,6 +92,41 @@ namespace SeminarDeligate
             }
             Console.WriteLine(((Calc)sender).Result);
         }
+
+        static bool DoubleTryParse(string str, out double value)
+        {
+            value = 0;
+            try
+            {
+                value = Convert.ToDouble(str);
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex);
+                return false;
+            }
+            return true;
+        }
+
+        static void NegativeNumber(double number)
+        {
+            
+            if (number < 0)
+            { 
+                throw new NegativeExeption("Число отрицательное", new Exception("Введено недопустимое число"));
+            }
+        }
+
+        static void ResultNegativeNumber (double number)
+        {
+            if (number < 0)
+            {
+                throw new NegativeExeption("Результат операции оторицателен!", new Exception("Выполнено недопустимое действие!"));
+            }
+
+        }
+
+        
     }
 
     
